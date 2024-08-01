@@ -6,7 +6,16 @@ import { api } from '@/data/api'
 import { IProduct } from '@/data/types/product'
 
 async function getFeaturedProducts(): Promise<IProduct[]> {
-  const response = await api('/products/featured')
+  const response = await api('/products/featured', {
+    next: {
+      revalidate: 60 * 60, // 1 Hour
+    },
+    // cache: 'force-cache', // DEFAULT - Significa, que a requisição será feita uma vez, e ficará cacheada por tempo indeterminado.
+    // cache: 'no-store', // Significa, que a requisição não será cacheada, toda vez que o usuário acessar esse página ela será carregada do 0.
+    // next: {
+    //   revalidate: 60 * 60 * 24, // Significa, que a requisição será feita uma vez, e ficará cacheada por 24 horas.
+    // },
+  })
 
   const products = await response.json()
 
