@@ -3,25 +3,25 @@
 import { createContext, ReactNode, useContext, useState } from 'react'
 
 type TCartItem = {
-  productId: string
+  productId: number
   quantity: number
 }
 
-interface ICardContextType {
+interface ICartContextType {
   items: TCartItem[]
-  addToCart: (productId: string) => void
+  addToCart: (productId: number) => void
 }
 
-interface ICardProvider {
+interface ICartProvider {
   children: ReactNode
 }
 
-const CardContext = createContext({} as ICardContextType)
+const CartContext = createContext({} as ICartContextType)
 
-export function CartProvider({ children }: ICardProvider) {
+export function CartProvider({ children }: ICartProvider) {
   const [cartItems, setCartItems] = useState<TCartItem[]>([])
 
-  function addToCart(productId: string) {
+  function addToCart(productId: number) {
     setCartItems((prevItems) => {
       const productInCart = prevItems.some(
         (item) => item.productId === productId,
@@ -40,15 +40,15 @@ export function CartProvider({ children }: ICardProvider) {
   }
 
   return (
-    <CardContext.Provider
+    <CartContext.Provider
       value={{
         items: cartItems,
         addToCart,
       }}
     >
       {children}
-    </CardContext.Provider>
+    </CartContext.Provider>
   )
 }
 
-export const useCard = () => useContext(CardContext)
+export const useCart = () => useContext(CartContext)
